@@ -119,11 +119,12 @@ app.put("/change-password", async (request, response) => {
         dbUser.password
       );
       if (isPasswordMatched === true) {
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
         const updateQuery = `
             UPDATE
                 user
             SET
-                password = '${newPassword}';
+                password = '${hashedNewPassword}';
         `;
         await db.run(updateQuery);
         response.status(200);
